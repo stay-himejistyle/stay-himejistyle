@@ -8,7 +8,7 @@ interface Props {
 
 const {
   title,
-  description = "姫路の小さな宿の集客プラットフォーム。周辺観光・グルメ・モデルプランなどの滞在情報を集約。",
+  description = "STAY HIMEJI by 姫路スタイル｜姫路の小さな宿のキュレーションメディア。周辺観光・グルメ・滞在モデルを編集して、各宿の体験価値を底上げします。",
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString() ?? "https://stay.himejistyle.jp/";
@@ -25,6 +25,7 @@ const siteUrl = Astro.site?.toString() ?? "https://stay.himejistyle.jp/";
     <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl).toString()} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="STAY HIMEJI by 姫路スタイル" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ja_JP" />
     <title>{title}</title>
