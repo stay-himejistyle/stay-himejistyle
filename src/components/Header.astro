@@ -1,0 +1,60 @@
+---
+// LINE友だち追加URL: @309atmjy の暫定リンク形式。
+// フェーズ5（友だち集め設定）で発行される正式な短縮URL（lin.ee/...）に差し替え予定。
+const lineAddFriendUrl = "https://line.me/R/ti/p/@309atmjy";
+
+const navLinks = [
+  { href: "/stays/", label: "宿一覧" },
+  { href: "/articles/", label: "食・泊・遊" },
+  { href: "/about/", label: "About" },
+];
+---
+
+<header class="border-b border-stone-200 bg-stone-50/95 backdrop-blur sticky top-0 z-40">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <a href="/" class="text-lg font-bold tracking-tight text-stone-900">
+      STAY HIMEJI
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="text-sm text-stone-700 transition hover:text-stone-950"
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={lineAddFriendUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 rounded-full bg-[#06C755] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+      >
+        友だち追加
+      </a>
+    </nav>
+
+    <details class="md:hidden">
+      <summary class="list-none cursor-pointer rounded p-2 text-stone-700 select-none">
+        <span class="sr-only">メニュー</span>
+        ☰
+      </summary>
+      <div class="absolute inset-x-0 top-full border-b border-stone-200 bg-stone-50 px-6 py-4 shadow-sm">
+        <nav class="flex flex-col gap-4">
+          {navLinks.map((link) => (
+            <a href={link.href} class="text-stone-700">{link.label}</a>
+          ))}
+          <a
+            href={lineAddFriendUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex w-fit items-center gap-1.5 rounded-full bg-[#06C755] px-4 py-2 text-sm font-medium text-white"
+          >
+            LINE友だち追加
+          </a>
+        </nav>
+      </div>
+    </details>
+  </div>
+</header>

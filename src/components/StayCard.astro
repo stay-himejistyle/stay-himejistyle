@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { toSlug } from "../lib/slug";
+
+interface Props {
+  stay: CollectionEntry<"stays">;
+}
+
+const { stay } = Astro.props;
+const { data } = stay;
+
+const typeLabels: Record<string, string> = {
+  kominka: "古民家",
+  "ittou-gashi": "一棟貸し",
+  kanibukusho: "簡易宿所",
+  ryokan: "旅館",
+  hotel: "ホテル",
+  guesthouse: "ゲストハウス",
+};
+---
+
+<a
+  href={`/stays/${toSlug(stay.id)}/`}
+  class="group block overflow-hidden rounded-lg border border-stone-200 bg-white transition hover:border-stone-300 hover:shadow-md"
+>
+  <div class="aspect-[3/2] bg-stone-200">
+    {data.heroImage ? (
+      <Image
+        src={data.heroImage}
+        alt={data.name}
+        width={600}
+        height={400}
+        class="h-full w-full object-cover"
+      />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center text-sm text-stone-500">
+        {data.name}（写真準備中）
+      </div>
+    )}
+  </div>
+
+  <div class="p-4">
+    <p class="text-xs text-stone-500">
+      {typeLabels[data.type] ?? data.type} / {data.area}
+    </p>
+    <h3 class="mt-1 text-lg font-bold text-stone-900 group-hover:underline">
+      {data.name}
+    </h3>
+    <p class="mt-1 text-sm leading-relaxed text-stone-600">{data.tagline}</p>
+    <p class="mt-2 text-xs text-stone-500">
+      {data.rooms}室 ／ 定員{data.capacity}名
+    </p>
+  </div>
+</a>

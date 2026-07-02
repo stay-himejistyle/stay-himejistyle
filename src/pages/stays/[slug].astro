@@ -1,0 +1,125 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StayCard from "../../components/StayCard.astro";
+import { toSlug } from "../../lib/slug";
+
+export async function getStaticPaths() {
+  const stays = await getCollection("stays", ({ data }) => data.published);
+  return stays.map((stay) => ({
+    params: { slug: toSlug(stay.id) },
+    props: { stay, allStays: stays },
+  }));
+}
+
+const { stay, allStays } = Astro.props;
+const { data } = stay;
+const { Content } = await render(stay);
+
+const typeLabels: Record<string, string> = {
+  kominka: "古民家",
+  "ittou-gashi": "一棟貸し",
+  kanibukusho: "簡易宿所",
+  ryokan: "旅館",
+  hotel: "ホテル",
+  guesthouse: "ゲストハウス",
+};
+
+const otherStays = allStays
+  .filter((s) => s.id !== stay.id)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const priceText = data.priceRange
+  ? `¥${data.priceRange.min.toLocaleString()}${data.priceRange.max ? `〜¥${data.priceRange.max.toLocaleString()}` : "〜"}`
+  : "確認中";
+---
+
+<BaseLayout
+  title={`${data.name} | STAY HIMEJI by 姫路スタイル`}
+  description={data.tagline}
+>
+  <main class="mx-auto max-w-4xl px-6 py-12">
+    <div class="aspect-[3/2] overflow-hidden rounded-lg bg-stone-200">
+      {data.heroImage ? (
+        <Image
+          src={data.heroImage}
+          alt={data.name}
+          width={1200}
+          height={800}
+          class="h-full w-full object-cover"
+        />
+      ) : (
+        <div class="flex h-full w-full items-center justify-center text-stone-500">
+          {data.name}（写真準備中）
+        </div>
+      )}
+    </div>
+
+    <h1 class="mt-8 text-3xl font-bold text-stone-900">{data.name}</h1>
+    <p class="mt-2 text-lg text-stone-600">{data.tagline}</p>
+
+    <table class="mt-8 w-full border-collapse text-sm">
+      <tbody>
+        <tr class="border-t border-stone-200">
+          <th class="w-32 py-3 text-left font-medium text-stone-500">形態</th>
+          <td class="py-3 text-stone-800">{typeLabels[data.type] ?? data.type}</td>
+        </tr>
+        <tr class="border-t border-stone-200">
+          <th class="py-3 text-left font-medium text-stone-500">規模</th>
+          <td class="py-3 text-stone-800">{data.rooms}室 ／ 定員{data.capacity}名</td>
+        </tr>
+        <tr class="border-t border-stone-200">
+          <th class="py-3 text-left font-medium text-stone-500">所在</th>
+          <td class="py-3 text-stone-800">{data.address ?? `${data.area}（住所確認中）`}</td>
+        </tr>
+        <tr class="border-t border-stone-200">
+          <th class="py-3 text-left font-medium text-stone-500">価格帯</th>
+          <td class="py-3 text-stone-800">{priceText}</td>
+        </tr>
+        {data.officialUrl && (
+          <tr class="border-t border-b border-stone-200">
+            <th class="py-3 text-left font-medium text-stone-500">公式</th>
+            <td class="py-3">
+              <a href={data.officialUrl} target="_blank" rel="noopener noreferrer" class="text-stone-800 underline">
+                {data.officialUrl.replace(/^https?:\/\//, "")}
+              </a>
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+
+    <div class="prose prose-stone mt-10 max-w-none">
+      <h2 class="text-xl font-bold text-stone-900">この宿について</h2>
+      <Content />
+    </div>
+
+    {data.bookingLinks.length > 0 && (
+      <div class="mt-10">
+        <h2 class="text-xl font-bold text-stone-900">予約</h2>
+        <div class="mt-4 flex flex-wrap gap-3">
+          {data.bookingLinks.map((link) => (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-full border border-stone-300 px-5 py-2 text-sm text-stone-700 transition hover:border-stone-900 hover:text-stone-900"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="mt-16 border-t border-stone-200 pt-10">
+      <h2 class="text-xl font-bold text-stone-900">他の宿も見る</h2>
+      <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {otherStays.map((s) => (
+          <StayCard stay={s} />
+        ))}
+      </div>
+    </div>
+  </main>
+</BaseLayout>

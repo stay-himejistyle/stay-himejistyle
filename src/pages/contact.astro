@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const lineAddFriendUrl = "https://line.me/R/ti/p/@309atmjy";
+---
+
+<BaseLayout
+  title="お問い合わせ | STAY HIMEJI by 姫路スタイル"
+  description="STAY HIMEJI by 姫路スタイルへのお問い合わせ・各宿への予約に関するお問い合わせはこちらから。"
+>
+  <main class="mx-auto max-w-2xl px-6 py-16">
+    <h1 class="text-3xl font-bold text-stone-900">お問い合わせ</h1>
+    <div class="prose prose-stone mt-8 max-w-none">
+      <p>
+        記事内容・掲載物件・取材依頼などに関するお問い合わせは、公式LINEにて承っております。
+      </p>
+    </div>
+    <a
+      href={lineAddFriendUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-8 inline-flex items-center gap-1.5 rounded-full bg-[#06C755] px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
+    >
+      LINE友だち追加
+    </a>
+  </main>
+</BaseLayout>

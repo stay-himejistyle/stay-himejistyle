@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StayCard from "../../components/StayCard.astro";
+
+const stays = (await getCollection("stays", ({ data }) => data.published)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<BaseLayout
+  title="姫路の小さな宿一覧 | STAY HIMEJI by 姫路スタイル"
+  description="姫路城下町の古民家・一棟貸し・簡易宿所・ホテルなど、STAY HIMEJIが紹介する5つの小さな宿の一覧です。"
+>
+  <main class="mx-auto max-w-6xl px-6 py-16">
+    <h1 class="text-3xl font-bold text-stone-900">姫路の小さな宿、5軒。</h1>
+    <p class="mt-3 text-stone-600">
+      それぞれ形態も規模も違う、姫路の個性ある宿を並列でご紹介しています。
+    </p>
+    <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {stays.map((stay) => (
+        <StayCard stay={stay} />
+      ))}
+    </div>
+  </main>
+</BaseLayout>
