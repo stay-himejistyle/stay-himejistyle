@@ -6,7 +6,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://stay.himejistyle.jp',
-  trailingSlash: 'always',
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
